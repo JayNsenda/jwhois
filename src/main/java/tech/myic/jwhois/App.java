@@ -20,51 +20,109 @@ import java.util.regex.Pattern;
 public class App {
 
     public static void main(String[] args) {
+        boolean isLinux = isLinux();
+        if (!isLinux) {
+            throw new RuntimeException("The code is not supported on: [" + System.getProperty("os.name") + "] operating system yet.");
+        }
+
+        String in = args[0];
 
         try {
-
-            boolean isLinux = isLinux();
-            if (!isLinux) {
-                throw new RuntimeException("The code is not supported on: [" + System.getProperty("os.name") + "] operating system yet.");
-            }
-
-            String pathToEmlFile = "/home/jules/Downloads/RE,.eml";
-
-            String emailSource = getSourceFromEmailFile(pathToEmlFile);
-
-            String ip = getIpAddressFromEmailSource(emailSource);
-
-            System.out.println("IP: " + ip);
-
-            ProcessBuilder pb = new  ProcessBuilder("whois", ip);
-
-            Process process;
-            try {
-                process = pb.start();
-            } catch (IOException ex) {
-                throw new RuntimeException("Unable to process command", ex);
-            }
-
-            StringBuilder sb = new StringBuilder();
-
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line).append("\n");
+            if (in.contains("ef=")) {
+                in = in.substring(in.indexOf("ef=") + 3);
+                try {
+                    usingEmailFile(in);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException("Unable to get email details using email file", ex);
                 }
-            } catch (IOException ex) {
-                throw new RuntimeException("Error reading results from command", ex);
+            } else if (in.contains("ip=")) {
+                in = in.substring(in.indexOf("ip=") + 3);
+                try {
+                    usingIPAdress(in);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException("Unable to get email details using IP address", ex);
+                }
+            } else if (in.contains("te=")) {
+                in = in.substring(in.indexOf("te=") + 3);
+                usingSourceEmail(in);
+            } else if ("?".equals(in) || in.equals("--help")) {
+                System.out.println("Welcome to jwhois.\n"
+                        + "==========================================================\n"
+                        + "This program allows you to see source details of an email\n"
+                        + "you have received either in your inbox or spam.\n"
+                        + "You can pass in:\n"
+                        + "\t a. an email(.eml) file from your local computer: \n"
+                        + "\t    This would be the actual email file\n"
+                        + "\t ** the argument will be: ef=<path_to_the_eml_file>\n"
+                        + "\t b. an IP address: This is the IP address (IPv4) of \n"
+                        + "\t    the email\n"
+                        + "\t ** the argument will be: ip=<the_ip_address>\n"
+                        + "\t c. the source email or orignail email. You can google \n"
+                        + "\t    to know how to get this :)\n"
+                        + "\t ** the arcgument will be: te=<email_source>\n"
+                        + "==========================================================\n"
+                        + "PRE-REQUESITE\n"
+                        + "In order to use this program, please make sure you are:\n"
+                        + "\t 1. Running a Linus machine,\n"
+                        + "\t 2. Have installed the whois command.\n"
+                        + "==========================================================\n"
+                        + "EXAMPLE ON RUNNING THE PROGRAM\n"
+                        + "Eg.1: Running the program with email file:\n"
+                        + "\t java -jar jwhois ef=/home/john/Download/example.eml\n"
+                        + "Eg.2: Running the program with IP address:\n"
+                        + "\t java -jar jwhois ip=193.0.0.1\n"
+                        + "Eg.3: Running the program with source email:\n"
+                        + "\t java -jar jwhois ef=/home/john/Download/example.eml\n"
+                        + "Enjoy!");
+                System.exit(1);
+            } else if (args.length > 1) {
+                System.err.println("Enter only 1 params in order to proceed \n"
+                        + "Please type: ? or --help to get help");
+                System.exit(1);
             }
-
-            if (process.waitFor() != 0) {
-                throw new RuntimeException("Unable to get result from command");
-            }
-
-            System.out.println("Results of whois: " + sb.toString());
-
-        } catch (InterruptedException ex) {
-            throw new RuntimeException("Error checking origin of email", ex);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Incorrect parameters entered", e);
         }
+    }
+
+    private static void displayEmailDetailUsingIp(String ip) throws InterruptedException {
+        ProcessBuilder pb = new ProcessBuilder("whois", ip);
+
+        Process process;
+        try {
+            process = pb.start();
+        } catch (IOException ex) {
+            throw new RuntimeException("Unable to process command", ex);
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+        } catch (IOException ex) {
+            throw new RuntimeException("Error reading results from command", ex);
+        }
+
+        if (process.waitFor() != 0) {
+            throw new RuntimeException("Unable to get result from command");
+        }
+
+        System.out.println("Results of whois: " + sb.toString());
+    }
+
+    private static void usingEmailFile(String firstArg) throws InterruptedException {
+        displayEmailDetailUsingIp(getIpAddressFromEmailSource(getSourceFromEmailFile(firstArg)));
+    }
+
+    private static void usingIPAdress(String firstArg) throws InterruptedException {
+        displayEmailDetailUsingIp(firstArg);
+    }
+
+    private static void usingSourceEmail(String firstArg) {
+        throw new RuntimeException("This method is not supported yet");
     }
 
     private static String getSourceFromEmailFile(String pathToEmlFile) {
@@ -84,8 +142,6 @@ public class App {
         } catch (IOException ex) {
             throw new RuntimeException("Error reading file: " + pathToEmlFile, ex);
         }
-
-        System.out.println("Email: \n" + sb.toString());
 
         return sb.toString();
     }
