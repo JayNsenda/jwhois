@@ -25,7 +25,6 @@ public class App {
 
             boolean isLinux = isLinux();
             if (!isLinux) {
-                System.err.println("The code is not supported on: [" + System.getProperty("os.name") + "] operating system yet.");
                 throw new RuntimeException("The code is not supported on: [" + System.getProperty("os.name") + "] operating system yet.");
             }
 
