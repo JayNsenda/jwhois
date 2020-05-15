@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,9 +43,12 @@ public class App {
                 } catch (InterruptedException ex) {
                     throw new RuntimeException("Unable to get email details using IP address", ex);
                 }
-            } else if (in.contains("te=")) {
-                in = in.substring(in.indexOf("te=") + 3);
-                usingSourceEmail(in);
+            } else if (in.contains("-te")) {
+                try {
+                    usingSourceEmail();
+                } catch (IOException | InterruptedException ex) {
+                    throw new RuntimeException("Unable to get email details using email source", ex);
+                }
             } else if ("?".equals(in) || in.equals("--help")) {
                 System.out.println("Welcome to jwhois.\n"
                         + "==========================================================\n"
@@ -57,9 +61,10 @@ public class App {
                         + "\t b. an IP address: This is the IP address (IPv4) of \n"
                         + "\t    the email\n"
                         + "\t ** the argument will be: ip=<the_ip_address>\n"
-                        + "\t c. the source email or orignail email. You can google \n"
+                        + "\t c. the source email or orignail email. You can google\n"
                         + "\t    to know how to get this :)\n"
-                        + "\t ** the arcgument will be: te=<email_source>\n"
+                        + "\t ** the arcgument will be: -te, press enter then paste\n"
+                        + "\t    the<email_source> and preess Ctrl+D on your keyboard\n"
                         + "==========================================================\n"
                         + "PRE-REQUESITE\n"
                         + "In order to use this program, please make sure you are:\n"
@@ -109,8 +114,9 @@ public class App {
         if (process.waitFor() != 0) {
             throw new RuntimeException("Unable to get result from command");
         }
-
-        System.out.println("Results of whois: " + sb.toString());
+        System.out.println("==========================================================================");
+        System.out.println(sb.toString());
+        System.out.println("==========================================================================");
     }
 
     private static void usingEmailFile(String firstArg) throws InterruptedException {
@@ -121,8 +127,23 @@ public class App {
         displayEmailDetailUsingIp(firstArg);
     }
 
-    private static void usingSourceEmail(String firstArg) {
-        throw new RuntimeException("This method is not supported yet");
+    private static void usingSourceEmail() throws IOException, InterruptedException {
+        StringBuilder sb = new StringBuilder();
+
+        try (BufferedReader r = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8))) {
+            String line;
+
+            while ((line = r.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+        }
+
+        String inText = sb.toString();
+
+        String ip = getIpAddressFromEmailSource(inText);
+
+        displayEmailDetailUsingIp(ip);
+
     }
 
     private static String getSourceFromEmailFile(String pathToEmlFile) {
