@@ -56,12 +56,12 @@ public class App {
                         + "\t b. an IP address: This is the IP address (IPv4) of \n"
                         + "\t    the email\n"
                         + "\t ** the argument will be: ip=<the_ip_address>\n"
-                        + "\t c. the source email or orignail email. You can google\n"
+                        + "\t c. the source email or original email. You can google\n"
                         + "\t    to know how to get this :)\n"
-                        + "\t ** the arcgument will be: -te, press enter then paste\n"
-                        + "\t    the<email_source> and preess Ctrl+D on your keyboard\n"
+                        + "\t ** the argument will be: -te, press enter then paste\n"
+                        + "\t    the<email_source> and press Ctrl+D on your keyboard\n"
                         + "==========================================================\n"
-                        + "PRE-REQUESITE\n"
+                        + "PRE-REQUISITE\n"
                         + "In order to use this program, please make sure you are:\n"
                         + "\t 1. Running a Linus machine,\n"
                         + "\t 2. Have installed the whois command.\n"
@@ -164,7 +164,7 @@ public class App {
 
     private static String getIpAddressFromEmailSource(String text) {
 
-        String regex = "(Received:).*(\\s{1}\\[\\d{0,}.\\d{0,}.\\d{0,}.\\d{0,}\\]\\))";
+        String regex = "(Received:).*(\\s\\[\\d*.\\d*.\\d*.\\d*]\\))";
 
         Pattern pattern = Pattern.compile(regex);
         Matcher m = pattern.matcher(text);
