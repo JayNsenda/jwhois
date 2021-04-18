@@ -19,20 +19,20 @@ public class Processor
         if (in.contains("ef=")){
             in = in.substring(in.indexOf("ef=") + 3);
             try {
-                Processor.usingEmailFile(in);
+                usingEmailFile(in);
             }catch (InterruptedException ex){
                 throw new RuntimeException("Unable to get email details using email file", ex);
             }
         }else if (in.contains("ip=")){
             in = in.substring(in.indexOf("ip=") + 3);
             try {
-                Processor.usingIPAddress(in);
+                usingIPAddress(in);
             }catch (InterruptedException ex){
                 throw new RuntimeException("Unable to get email details using IP address", ex);
             }
         }else if (in.contains("-te")){
             try {
-                Processor.usingSourceEmail();
+                usingSourceEmail();
             }catch (IOException | InterruptedException ex){
                 throw new RuntimeException("Unable to get email details using email source", ex);
             }
