@@ -1,4 +1,4 @@
-package tech.myic.jwhois;
+package tech.myic.jwhois.util;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

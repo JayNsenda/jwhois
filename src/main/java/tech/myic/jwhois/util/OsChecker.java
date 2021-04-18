@@ -1,8 +1,8 @@
-package tech.myic.jwhois;
+package tech.myic.jwhois.util;
 
-public class OSUtil
+public class OsChecker
 {
-    private OSUtil()
+    private OsChecker()
     {
     }
 
