@@ -3,6 +3,8 @@ package tech.myic.jwhois.processor;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import tech.myic.jwhois.util.IpAddressReader;
 import tech.myic.jwhois.util.ResultPrinter;
 
@@ -13,7 +15,7 @@ public class EmailFileProcessor
     public void process(String path)
             throws InterruptedException, IOException
     {
-        if (!path.toLowerCase().endsWith(".eml")){
+        if (!Files.probeContentType(Paths.get(path)).equals("message/rfc822")){
             throw new RuntimeException("File is not an email");
         }
 
