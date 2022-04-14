@@ -1,4 +1,4 @@
-package tech.myic.jwhois;
+package tech.myic.jwhois.processor;
 
 import java.io.IOException;
 

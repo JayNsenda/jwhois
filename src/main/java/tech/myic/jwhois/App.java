@@ -1,7 +1,10 @@
 package tech.myic.jwhois;
 
 import java.io.IOException;
-import tech.myic.jwhois.util.Helper;
+import tech.myic.jwhois.processor.EmailFileProcessor;
+import tech.myic.jwhois.processor.EmailSourceProcessor;
+import tech.myic.jwhois.processor.IpAddressProcess;
+import tech.myic.jwhois.util.AppHelper;
 import tech.myic.jwhois.util.OsChecker;
 
 public class App
@@ -15,7 +18,7 @@ public class App
 
         String in = args[0];
 
-        Helper.print(args, in);
+        AppHelper.print(args, in);
 
         if (in.contains("ef=")){
             in = in.substring(in.indexOf("ef=") + 3);

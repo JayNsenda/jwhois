@@ -1,8 +1,8 @@
 package tech.myic.jwhois.util;
 
-public class Helper
+public class AppHelper
 {
-    private Helper()
+    private AppHelper()
     {
     }
 
