@@ -6,7 +6,7 @@ public class Helper
     {
     }
 
-    public static void printHelp(String[] args, String in)
+    public static void print(String[] args, String in)
     {
         if ("?".equals(in) || in.equals("--help")){
             System.out.println("Welcome to jwhois.\n"
