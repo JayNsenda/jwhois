@@ -11,7 +11,7 @@ public class AppHelper
         if ("?".equals(in) || in.equals("--help")){
             System.out.println("Welcome to jwhois.\n"
                     + "==========================================================\n"
-                    + "This program allows you to see source details of an email\n"
+                    + "This command line program allows you to see source details of an email\n"
                     + "you have received either in your inbox or spam.\n"
                     + "You can pass in:\n"
                     + "\t a. an email(.eml) file from your local computer: \n"
@@ -27,16 +27,18 @@ public class AppHelper
                     + "==========================================================\n"
                     + "PRE-REQUISITE\n"
                     + "In order to use this program, please make sure you are:\n"
-                    + "\t 1. Running a Linus machine,\n"
+                    + "\t 1. Running a Linux machine,\n"
                     + "\t 2. Have installed the whois command.\n"
                     + "==========================================================\n"
                     + "EXAMPLE ON RUNNING THE PROGRAM\n"
                     + "Eg.1: Running the program with email file:\n"
-                    + "\t java -jar jwhois ef=/home/john/Download/example.eml\n"
+                    + "\t java -jar jwhois.jar ef=<PATH_TO_EMAIL_FILE>/example.eml\n"
                     + "Eg.2: Running the program with IP address:\n"
-                    + "\t java -jar jwhois ip=193.0.0.1\n"
+                    + "\t java -jar jwhois.jar ip=<IP_ADDRESS>\n"
                     + "Eg.3: Running the program with source email:\n"
-                    + "\t java -jar jwhois ef=/home/john/Download/example.eml\n"
+                    + "\t java -jar jwhois.jar -te \n"
+                    + "Press ENTER after typing the above command, then Paste the source and click CTRL+D.\n"
+                    + "\n"
                     + "Enjoy!");
             System.exit(1);
         }else if (args.length > 1){
